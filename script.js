@@ -1,61 +1,58 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const addButton = document.getElementById('add-task');
-    const newTaskInput = document.getElementById('new-task');
-    const taskList = document.getElementById('task-list');
-
-    // Funktion zum Hinzufügen einer Aufgabe
-    function addTask(taskText) {
-        const li = document.createElement('li');
-
-        // Autokorrektur: Erstes Zeichen groß
-        const correctedText = taskText.charAt(0).toUpperCase() + taskText.slice(1);
-
-        const taskSpan = document.createElement('span');
-        taskSpan.textContent = correctedText;
-
-        // Erstelle das Kontrollkästchen
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-
-        // Eventlistener für das Häkchen
-        checkbox.addEventListener('change', () => {
-            if (checkbox.checked) {
-                li.classList.add('done');
-            } else {
-                li.classList.remove('done');
-            }
-        });
-
-        // Löschen der Aufgabe
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Löschen';
-        deleteButton.classList.add('delete');
-        deleteButton.addEventListener('click', () => {
-            taskList.removeChild(li);
-        });
-
-        // Füge das Kontrollkästchen, den Text und den Löschbutton hinzu
-        li.appendChild(checkbox);
-        li.appendChild(taskSpan);
-        li.appendChild(deleteButton);
-        taskList.appendChild(li);
+// EventListener für den Hinzufügen-Button und die Eingabetaste (Enter)
+document.getElementById('addButton').addEventListener('click', addTask);
+document.getElementById('inputText').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+        addTask();
     }
-
-    // Event für den "Hinzufügen"-Button
-    addButton.addEventListener('click', () => {
-        const taskText = newTaskInput.value.trim();
-        if (taskText === '') return;
-        addTask(taskText);
-        newTaskInput.value = '';  // Eingabefeld leeren
-    });
-
-    // Event für das Drücken der Enter-Taste
-    newTaskInput.addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') {
-            const taskText = newTaskInput.value.trim();
-            if (taskText === '') return;
-            addTask(taskText);
-            newTaskInput.value = '';  // Eingabefeld leeren
-        }
-    });
 });
+
+function addTask() {
+    const inputText = document.getElementById('inputText').value.trim();  // Holen des Texts aus dem Eingabefeld
+    if (inputText === "") return; // Falls das Eingabefeld leer ist, nichts tun
+
+    const todoList = document.getElementById('todoList'); // To-Do-Liste (UL-Element)
+
+    const listItem = document.createElement('li'); // Neues Listenelement (LI)
+
+    // Checkbox erstellen
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.addEventListener('change', toggleTaskCompletion);
+
+    // Text erstellen
+    const textNode = document.createElement('span');
+    textNode.textContent = inputText;
+
+    // Löschen-Button erstellen
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Löschen';
+    deleteButton.classList.add('delete-button');
+    deleteButton.addEventListener('click', deleteTask);
+
+    // Die Checkbox, den Text und den Löschen-Button in das Listenelement einfügen
+    listItem.appendChild(checkbox);
+    listItem.appendChild(textNode);
+    listItem.appendChild(deleteButton);
+
+    // Das Listenelement in die To-Do-Liste einfügen
+    todoList.appendChild(listItem);
+
+    // Eingabefeld zurücksetzen
+    document.getElementById('inputText').value = '';
+}
+
+// Funktion zum Markieren der Aufgabe als erledigt
+function toggleTaskCompletion(e) {
+    const taskText = e.target.nextElementSibling;
+    if (e.target.checked) {
+        taskText.classList.add('completed');
+    } else {
+        taskText.classList.remove('completed');
+    }
+}
+
+// Funktion zum Löschen einer Aufgabe
+function deleteTask(e) {
+    const task = e.target.parentElement;
+    task.remove();
+}
