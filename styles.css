@@ -54,9 +54,9 @@ ul {
 
 /* Styling für jede To-Do-Aufgabe */
 li {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* Fügt Abstand zwischen den Elementen hinzu */
+    display: flex; /* Flexbox aktivieren, um die Elemente nebeneinander anzuordnen */
+    align-items: center; /* Vertikal zentrieren */
+    justify-content: flex-start; /* Alle Elemente links ausrichten */
     padding: 10px;
     margin: 5px 0;
     border: 1px solid #ddd;
@@ -64,12 +64,14 @@ li {
     background-color: #fafafa;
 }
 
+/* Checkbox Styling */
 li input[type="checkbox"] {
     margin-right: 10px;
 }
 
+/* Text Styling */
 li span {
-    flex-grow: 1;
+    flex-grow: 1;  /* Der Text nimmt den gesamten verbleibenden Platz ein */
     margin-left: 10px;
 }
 
